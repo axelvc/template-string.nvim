@@ -19,3 +19,7 @@ require('template-string').setup({
   jsx_brackets = true, -- should add brackets to jsx attributes
 })
 ```
+
+## License
+
+Licensed under the [MIT](./LICENSE) license.
