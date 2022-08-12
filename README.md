@@ -6,7 +6,7 @@ I think it's a small feature but useful if you write js/ts code
 
 ## Explication
 
-As soon as this plugin detects you're trying to use template (adding ${}) the quotes will be changed to backticks
+As soon as this plugin detects you're trying to use template strings (adding ${}) the quotes will be changed to backticks
 
 ### Examples
 
