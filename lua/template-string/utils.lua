@@ -2,22 +2,25 @@ local ts_utils = require("nvim-treesitter.ts_utils")
 
 local M = {}
 
----return cursor node if it's under a string node
+---find the closest outward string node from the cursor and return if found
 function M.get_string_node()
 	local node = ts_utils.get_node_at_cursor()
+	local valid_nodes = { "string", "template_string" }
 
-	-- stylua: ignore
-	if not node then return end
+	---depth limited to avoid unnecesary depth search
+	local max_depth = 2
+	for _ = 1, max_depth do
+		-- stylua: ignore
+		if not node then return end
 
-	local type = node:type()
+		if vim.tbl_contains(valid_nodes, node:type()) then
+			return node
+		end
 
-	if type == "string" then
-		return node
-	elseif type == "string_fragment" then
-		return node:parent()
-	elseif type == "template_string" then
-		return node
+		node = node:parent()
 	end
+
+	return node
 end
 
 ---@param str string
