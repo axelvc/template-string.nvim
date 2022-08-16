@@ -2,6 +2,12 @@ local ts_utils = require("nvim-treesitter.ts_utils")
 
 local M = {}
 
+M.quote = {
+	SINGLE = [[']],
+	DOUBLE = [["]],
+	BACKTICK = [[`]],
+}
+
 ---find the closest outward string node from the cursor and return if found
 function M.get_string_node()
 	local node = ts_utils.get_node_at_cursor()

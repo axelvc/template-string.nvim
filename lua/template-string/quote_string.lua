@@ -8,7 +8,7 @@ function M.handle_quote_string(node, buf)
 	-- stylua: ignore
 	if not U.has_template_string(text) then return end
 
-	local new_text = U.replace_quotes(text, "`")
+	local new_text = U.replace_quotes(text, U.quote.BACKTICK)
 
 	-- add brackets if it's jsx attribute
 	if C.options.jsx_brackets and U.is_jsx_node(node) then

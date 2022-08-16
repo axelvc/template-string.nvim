@@ -24,17 +24,18 @@ function M.handle_template_string(node, buf)
 		return
 	end
 
-	-- TODO: detect which quotes are used in the file
-	local new_text = U.replace_quotes(text, "'")
+	local quotes = C.options.restore_quotes.normal
 
 	-- replace node with its parent to remove brackets when replacing text
 	if C.options.jsx_brackets and U.is_jsx_node(node) then
 		node = node:parent()
+		quotes = C.options.restore_quotes.jsx
 
-		-- move the cursor to stay in the same position after adding brackets
+		-- move the cursor to stay in the same position after removing brackets
 		U.move_cursor({ 0, -1 })
 	end
 
+	local new_text = U.replace_quotes(text, quotes)
 	U.replace_node_text(node, buf, new_text)
 end
 
