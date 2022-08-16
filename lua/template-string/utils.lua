@@ -14,7 +14,7 @@ function M.get_string_node()
 	local valid_nodes = { "string", "template_string" }
 
 	---depth limited to avoid unnecesary depth search
-	local max_depth = 2
+	local max_depth = 3
 	for _ = 1, max_depth do
 		-- stylua: ignore
 		if not node then return end
@@ -25,8 +25,6 @@ function M.get_string_node()
 
 		node = node:parent()
 	end
-
-	return node
 end
 
 ---@param str string
