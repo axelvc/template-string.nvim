@@ -1,7 +1,7 @@
 local U = require("template-string.utils")
 local C = require("template-string.config")
-local quote = require('template-string.quote_string')
-local template = require('template-string.template_string')
+local quote = require("template-string.quote_string")
+local template = require("template-string.template_string")
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -20,9 +20,6 @@ function M.handle_type()
 	elseif C.options.remove_template_string then
 		template.handle_template_string(node, buf)
 	end
-end
-
-function M.handle_filetype()
 end
 
 function M.setup(options)
