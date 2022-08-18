@@ -34,7 +34,7 @@ function M.setup(options)
 				return
 			end
 
-			autocmd("TextChangedI", {
+			autocmd({ "TextChanged", "TextChangedI" }, {
 				group = M.group,
 				buffer = ev.buf,
 				callback = M.handle_type,

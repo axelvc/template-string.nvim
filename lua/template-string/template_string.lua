@@ -2,12 +2,6 @@ local U = require("template-string.utils")
 local C = require("template-string.config")
 local M = {}
 
----@param str	string
----@return boolean
-function M.is_multiline(str)
-	return str:match("\n") ~= nil
-end
-
 ---return if the given string node is part of a tag function
 ---e.g - css`some text`
 ---@param node userdata tsnode
@@ -39,7 +33,7 @@ function M.handle_template_string(node, buf)
 	if
 		U.has_template_string(text)
 		or M.has_quotes(text)
-		or M.is_multiline(text)
+		or U.is_multiline(text)
 		or M.manual_backticks(node)
 		or M.is_tag_function(node)
 	then

@@ -2,11 +2,23 @@ local U = require("template-string.utils")
 local C = require("template-string.config")
 local M = {}
 
+function M.is_already_template(text)
+	return text:match("^{?`.*`}?$") ~= nil
+end
+
 function M.handle_quote_string(node, buf)
 	local text = vim.treesitter.get_node_text(node, buf)
 
-	-- stylua: ignore
-	if not U.has_template_string(text) then return end
+	if
+		U.is_undo_or_redo()
+		or not U.has_template_string(text)
+		-- ignore last redo
+		or M.is_already_template(text)
+		-- ignore multiline quote string (treesitter could detect quote string in bad syntax)
+		or U.is_multiline(text)
+	then
+		return
+	end
 
 	local new_text = U.replace_quotes(text, U.quote.BACKTICK)
 
