@@ -1,4 +1,4 @@
-local U = require('template-string.utils')
+local U = require("template-string.utils")
 local M = {}
 
 M.options = {

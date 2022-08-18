@@ -1,7 +1,7 @@
 local U = require("template-string.utils")
 local C = require("template-string.config")
-local quote = require('template-string.quote_string')
-local template = require('template-string.template_string')
+local quote = require("template-string.quote_string")
+local template = require("template-string.template_string")
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -22,9 +22,6 @@ function M.handle_type()
 	end
 end
 
-function M.handle_filetype()
-end
-
 function M.setup(options)
 	C.options = vim.tbl_extend("force", C.options, options or {})
 	M.group = augroup("TemplateString", { clear = true })
@@ -37,7 +34,7 @@ function M.setup(options)
 				return
 			end
 
-			autocmd("TextChangedI", {
+			autocmd({ "TextChanged", "TextChangedI" }, {
 				group = M.group,
 				buffer = ev.buf,
 				callback = M.handle_type,

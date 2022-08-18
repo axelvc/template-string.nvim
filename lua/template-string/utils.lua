@@ -8,6 +8,13 @@ M.quote = {
 	BACKTICK = [[`]],
 }
 
+--- NOTE: this doesn't detect the last redo
+function M.is_undo_or_redo()
+	local tree = vim.fn.undotree()
+
+	return tree.seq_cur ~= tree.seq_last
+end
+
 ---find the closest outward string node from the cursor and return if found
 function M.get_string_node()
 	local node = ts_utils.get_node_at_cursor()
@@ -27,22 +34,28 @@ function M.get_string_node()
 	end
 end
 
+---@param str	string
+---@return boolean
+function M.is_multiline(str)
+	return str:match("\n") ~= nil
+end
+
 ---@param str string
 ---@return boolean
 function M.has_template_string(str)
 	return str:match("${.*}") ~= nil
 end
 
----return if given node is part of a jsx attribute
+---know if given node must be handled as part of a JSX attribute
 ---@param node userdata tsnode
 ---@return boolean
 function M.is_jsx_node(node)
 	local parent_types = {
-		"jsx_attribute",
-		"jsx_expression",
+		string = "jsx_attribute",
+		template_string = "jsx_expression",
 	}
 
-	return vim.tbl_contains(parent_types, node:parent():type())
+	return parent_types[node:type()] == node:parent():type()
 end
 
 ---@param str string
