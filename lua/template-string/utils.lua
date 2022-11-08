@@ -40,31 +40,6 @@ function M.is_multiline(str)
 	return str:match("\n") ~= nil
 end
 
----@param str string
----@return boolean
-function M.has_template_string(str)
-	return str:match("${.*}") ~= nil
-end
-
----know if given node must be handled as part of a JSX attribute
----@param node userdata tsnode
----@return boolean
-function M.is_jsx_node(node)
-	local parent_types = {
-		string = "jsx_attribute",
-		template_string = "jsx_expression",
-	}
-
-	return parent_types[node:type()] == node:parent():type()
-end
-
----@param str string
----@param new_quote string
----@return string
-function M.replace_quotes(str, new_quote)
-	return new_quote .. str:sub(2, -2) .. new_quote
-end
-
 ---@param node userdata tsnode
 ---@param buf buffer id
 ---@param str string new string
