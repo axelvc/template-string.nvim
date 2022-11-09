@@ -79,11 +79,11 @@ function M.handle_quote_string(node, buf, text)
   local new_text = "f" .. text
   local lines = U.is_multiline(text) and M.get_text_lines(new_text) or { new_text }
 
+  U.replace_node_text(node, buf, lines)
+
   if not U.is_multiline(text) or M.is_cursor_in_first_row(node) then
     U.move_cursor({ 0, 1 })
   end
-
-  U.replace_node_text(node, buf, lines)
 end
 
 ---@param node userdata tsnode
