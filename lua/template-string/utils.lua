@@ -63,7 +63,13 @@ end
 ---@param node userdata tsnode
 ---@return boolean
 function M.has_child_nodes(node)
-	return node:named_child_count() ~= 0
+	for child in node:iter_children() do
+		if child:named() and child:type() ~= "escape_sequence" then
+			return true
+		end
+	end
+
+	return false
 end
 
 return M
