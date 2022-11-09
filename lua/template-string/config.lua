@@ -2,7 +2,7 @@ local U = require("template-string.utils")
 local M = {}
 
 M.options = {
-	filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
+	filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "python" },
 	jsx_brackets = true,
 	remove_template_string = false,
 	restore_quotes = {

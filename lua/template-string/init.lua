@@ -6,7 +6,13 @@ local autocmd = vim.api.nvim_create_autocmd
 local M = {}
 
 function M.handle_text_changed()
-	handler.js.on_type()
+	local filetype = vim.opt.filetype:get()
+
+	if filetype == "python" then
+		handler.python.on_type()
+	else
+		handler.js.on_type()
+	end
 end
 
 function M.setup(options)

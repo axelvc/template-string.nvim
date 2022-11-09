@@ -11,16 +11,6 @@ function M.is_tag_function(node)
   return node:parent():type() == "call_expression"
 end
 
----know if the given node has manual backticks
----considering manual backticks when never were template substitutions (${})
----@param node userdata tsnode
----@return boolean
-function M.has_manual_backticks(node)
-  local child_count = node:named_child_count()
-
-  return child_count == 0
-end
-
 ---@param text string
 ---@return boolean
 function M.has_quotes(text)
@@ -83,7 +73,7 @@ function M.handle_quote_string(node, buf)
     U.move_cursor({ 0, 1 })
   end
 
-  U.replace_node_text(node, buf, new_text)
+  U.replace_node_text(node, buf, { new_text })
 end
 
 ---@param node userdata tsnode
@@ -94,9 +84,9 @@ function M.handle_template_string(node, buf)
   -- backticks must be kept on these cases
   if M.has_substitutions(text)
       or M.has_quotes(text)
-      or M.has_manual_backticks(node)
       or M.is_tag_function(node)
       or U.is_multiline(text)
+      or not U.has_child_nodes(node) -- is a manual template_string
   then
     return
   end
@@ -113,11 +103,11 @@ function M.handle_template_string(node, buf)
   end
 
   local new_text = M.replace_quotes(text, quotes)
-  U.replace_node_text(node, buf, new_text)
+  U.replace_node_text(node, buf, { new_text })
 end
 
 function M.on_type()
-  local node = U.get_string_node()
+  local node = U.get_string_node({ "string", "template_string" })
 
   -- stylua: ignore
   if not node then return end

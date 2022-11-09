@@ -16,9 +16,9 @@ function M.is_undo_or_redo()
 end
 
 ---find the closest outward string node from the cursor and return if found
-function M.get_string_node()
+---@param valid_nodes string[]
+function M.get_string_node(valid_nodes)
 	local node = ts_utils.get_node_at_cursor()
-	local valid_nodes = { "string", "template_string" }
 
 	---depth limited to avoid unnecesary depth search
 	local max_depth = 3
@@ -41,12 +41,12 @@ function M.is_multiline(str)
 end
 
 ---@param node userdata tsnode
----@param buf buffer id
----@param str string new string
-function M.replace_node_text(node, buf, str)
+---@param buf number bufnr
+---@param new_text string[] list of replacements
+function M.replace_node_text(node, buf, new_text)
 	local sr, sc, er, ec = node:range()
 
-	vim.api.nvim_buf_set_text(buf, sr, sc, er, ec, { str })
+	vim.api.nvim_buf_set_text(buf, sr, sc, er, ec, new_text)
 end
 
 ---move cursor relative to the current position
@@ -58,6 +58,12 @@ function M.move_cursor(pos)
 	pos[2] = pos[2] + col
 
 	vim.api.nvim_win_set_cursor(0, pos)
+end
+
+---@param node userdata tsnode
+---@return boolean
+function M.has_child_nodes(node)
+	return node:named_child_count() ~= 0
 end
 
 return M
