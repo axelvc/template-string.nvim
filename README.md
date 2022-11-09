@@ -1,8 +1,6 @@
 # Template String Converter
 
-This plugin is inspired in [Template String Converted vscode plugin](https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter)
-
-I think it's a small feature but useful if you write js/ts code
+This plugin is inspired in [Template String Converted](https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter) VS Code plugin
 
 ## Explication
 
@@ -27,8 +25,6 @@ Before           Input            After
 
 Opposite function, remove backticks when there are no template strings
 
-> Note: this function is experimental and may cause unexpected behaviors, disabled by default
-
 ![Remove template string demo](https://gist.githubusercontent.com/axelvc/b34d7fd659e573d0622f25d32ac3388a/raw/4761aab9cd46c8d8112e9aaf5900a139d46e7241/demo_2.gif)
 
 ## Requirements
@@ -36,13 +32,19 @@ Opposite function, remove backticks when there are no template strings
 - Neovim 0.7.0 or later
 - [nvim-treesitter plugin](https://github.com/nvim-treesitter/nvim-treesitter)
 
+## Supported languages:
+
+- Javascript / Typescript
+- JSX
+- Python
+
 ## Configuration
 
-Example with default config, if you preffer you can just call setup function with partial or no config and the default will be taken
+Example with the default config. If you prefer, you could call the setup function with partial or no config, and the default will be taken
 
 ```lua
 require('template-string').setup({
-  filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' }, -- filetypes where the plugin is active
+  filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' }, -- filetypes where the plugin is active
   jsx_brackets = true, -- must add brackets to jsx attributes
   remove_template_string = false, -- remove backticks when there are no template string
   restore_quotes = {
