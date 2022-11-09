@@ -34,19 +34,6 @@ function M.has_format_method(node, buf)
   return sibling_text:match("format") ~= nil
 end
 
----know if the user manually add "f" at start of the string
----@param node userdata tsnode
----@param buf number bufnr
----@param text string
----@return boolean
-function M.is_manual_convert(node, buf, text)
-  local rs, cs, re, ce = node:range()
-  local real_text = vim.api.nvim_buf_get_text(buf, rs, cs - 1, re, ce, {})[1]
-
-  -- use match method instead equal compare to ensure match in multiline strings
-  return ("f" .. text):match(real_text) ~= nil
-end
-
 ---convert a single multiline string to a table of strings
 ---@param text string
 ---@return string[]
@@ -63,6 +50,18 @@ function M.is_cursor_in_first_row(node)
   return cursor_row == node_row
 end
 
+---know if the cursor column is before at first string quote
+---@param node userdata tsnode
+---@param text string
+---@return boolean
+function M.before_quotes(node, text)
+  local _, node_col = node:range()
+  local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+  local first_quote_col = text:find("['\"]") + node_col
+
+  return cursor_col < first_quote_col
+end
+
 ---@param node userdata tsnode
 ---@param buf number bufnr
 ---@param text string
@@ -70,9 +69,8 @@ function M.handle_quote_string(node, buf, text)
   -- ignore cases
   if U.is_undo_or_redo()
       or M.has_format_method(node, buf)
-      or M.is_manual_convert(node, buf, text)
       or not M.has_interpolations(text)
-      or U.has_child_nodes(node) -- false positive (when removing the "f" from the string)
+      or M.before_quotes(node, text)
   then
     return
   end
@@ -95,6 +93,7 @@ function M.handle_f_string(node, buf, text)
   -- ignore cases
   if U.is_undo_or_redo()
       or M.has_interpolations(text)
+      or M.before_quotes(node, text)
       or not U.has_child_nodes(node) -- is a manual f-string
   then
     return
