@@ -1,29 +1,25 @@
-local U = require("template-string.utils")
 local C = require("template-string.config")
-local quote = require("template-string.quote_string")
-local template = require("template-string.template_string")
+local handler = require("template-string.langs")
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
 local M = {}
 
-function M.handle_type()
-	local node = U.get_string_node()
+function M.handle_text_changed()
+	local filetype = vim.opt.filetype:get()
 
-	-- stylua: ignore
-	if not node then return end
-
-	local buf = vim.api.nvim_win_get_buf(0)
-
-	if node:type() == "string" then
-		quote.handle_quote_string(node, buf)
-	elseif C.options.remove_template_string then
-		template.handle_template_string(node, buf)
+	if filetype == "python" then
+		handler.python.on_type()
+	else
+		handler.js.on_type()
 	end
 end
 
 function M.setup(options)
+	-- update config
 	C.options = vim.tbl_extend("force", C.options, options or {})
+
+	-- set autocmd
 	M.group = augroup("TemplateString", { clear = true })
 
 	autocmd("FileType", {
@@ -37,7 +33,7 @@ function M.setup(options)
 			autocmd({ "TextChanged", "TextChangedI" }, {
 				group = M.group,
 				buffer = ev.buf,
-				callback = M.handle_type,
+				callback = M.handle_text_changed,
 			})
 		end,
 	})

@@ -16,9 +16,9 @@ function M.is_undo_or_redo()
 end
 
 ---find the closest outward string node from the cursor and return if found
-function M.get_string_node()
+---@param valid_nodes string[]
+function M.get_string_node(valid_nodes)
 	local node = ts_utils.get_node_at_cursor()
-	local valid_nodes = { "string", "template_string" }
 
 	---depth limited to avoid unnecesary depth search
 	local max_depth = 3
@@ -40,38 +40,13 @@ function M.is_multiline(str)
 	return str:match("\n") ~= nil
 end
 
----@param str string
----@return boolean
-function M.has_template_string(str)
-	return str:match("${.*}") ~= nil
-end
-
----know if given node must be handled as part of a JSX attribute
 ---@param node userdata tsnode
----@return boolean
-function M.is_jsx_node(node)
-	local parent_types = {
-		string = "jsx_attribute",
-		template_string = "jsx_expression",
-	}
-
-	return parent_types[node:type()] == node:parent():type()
-end
-
----@param str string
----@param new_quote string
----@return string
-function M.replace_quotes(str, new_quote)
-	return new_quote .. str:sub(2, -2) .. new_quote
-end
-
----@param node userdata tsnode
----@param buf buffer id
----@param str string new string
-function M.replace_node_text(node, buf, str)
+---@param buf number bufnr
+---@param new_text string[] list of replacements
+function M.replace_node_text(node, buf, new_text)
 	local sr, sc, er, ec = node:range()
 
-	vim.api.nvim_buf_set_text(buf, sr, sc, er, ec, { str })
+	vim.api.nvim_buf_set_text(buf, sr, sc, er, ec, new_text)
 end
 
 ---move cursor relative to the current position
@@ -83,6 +58,18 @@ function M.move_cursor(pos)
 	pos[2] = pos[2] + col
 
 	vim.api.nvim_win_set_cursor(0, pos)
+end
+
+---@param node userdata tsnode
+---@return boolean
+function M.has_child_nodes(node)
+	for child in node:iter_children() do
+		if child:named() and child:type() ~= "escape_sequence" then
+			return true
+		end
+	end
+
+	return false
 end
 
 return M
