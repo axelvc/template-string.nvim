@@ -30,9 +30,9 @@ Opposite function, remove backticks when there are no template strings
 ## Requirements
 
 - Neovim 0.7.0 or later
-- [nvim-treesitter plugin](https://github.com/nvim-treesitter/nvim-treesitter)
+- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) plugin
 
-## Supported languages:
+## Supported languages
 
 - Javascript / Typescript
 - JSX
