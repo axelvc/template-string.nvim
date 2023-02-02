@@ -24,11 +24,13 @@ function M.setup(options)
 
 	autocmd("FileType", {
 		group = M.group,
-		pattern = "*",
+		pattern = C.options.filetypes,
 		callback = function(ev)
-			if not vim.tbl_contains(C.options.filetypes, ev.match) then
-				return
-			end
+			vim.api.nvim_clear_autocmds({
+				event = { "TextChanged", "TextChangedI" },
+				buffer = ev.buf,
+				group = M.group,
+			})
 
 			autocmd({ "TextChanged", "TextChangedI" }, {
 				group = M.group,
