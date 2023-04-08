@@ -1,5 +1,3 @@
-local ts_utils = require("nvim-treesitter.ts_utils")
-
 local M = {}
 
 M.quote = {
@@ -7,6 +5,8 @@ M.quote = {
 	DOUBLE = [["]],
 	BACKTICK = [[`]],
 }
+
+M.get_cusor_node = vim.treesitter.get_node or require("nvim-treesitter.ts_utils").get_node_at_cursor
 
 --- NOTE: this doesn't detect the last redo
 function M.is_undo_or_redo()
@@ -18,7 +18,7 @@ end
 ---find the closest outward string node from the cursor and return if found
 ---@param valid_nodes string[]
 function M.get_string_node(valid_nodes)
-	local node = ts_utils.get_node_at_cursor()
+	local node = M.get_cusor_node()
 
 	---depth limited to avoid unnecesary depth search
 	local max_depth = 3
