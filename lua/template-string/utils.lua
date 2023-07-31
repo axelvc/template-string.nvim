@@ -6,7 +6,13 @@ M.quote = {
 	BACKTICK = [[`]],
 }
 
-M.get_cusor_node = vim.treesitter.get_node or require("nvim-treesitter.ts_utils").get_node_at_cursor
+function M.get_cusor_node()
+    if vim.treesitter.get_node then
+        return vim.treesitter.get_node({ ignore_injections = false })
+    else
+        return require("nvim-treesitter.ts_utils").get_node_at_cursor()
+    end
+end
 
 --- NOTE: this doesn't detect the last redo
 function M.is_undo_or_redo()
