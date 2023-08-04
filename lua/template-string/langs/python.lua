@@ -59,6 +59,8 @@ function M.before_quotes(node, text)
   local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
   local first_quote_col = text:find("['\"]") + node_col
 
+  cursor_row = cursor_row - 1
+
   return node_row == cursor_row and cursor_col < first_quote_col
 end
 
