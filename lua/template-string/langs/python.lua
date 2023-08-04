@@ -55,11 +55,11 @@ end
 ---@param text string
 ---@return boolean
 function M.before_quotes(node, text)
-  local _, node_col = node:range()
-  local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+  local node_row, node_col = node:range()
+  local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
   local first_quote_col = text:find("['\"]") + node_col
 
-  return cursor_col < first_quote_col
+  return node_row == cursor_row and cursor_col < first_quote_col
 end
 
 ---@param node userdata tsnode
