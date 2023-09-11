@@ -1,8 +1,8 @@
 # Template String Converter
 
-This plugin is inspired in [Template String Converted](https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter) VS Code plugin
+This plugin is inspired by the VS Code plugin: [Template String Converted](https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter)
 
-## Explication
+## Explanation
 
 As soon as this plugin detects you're trying to use template strings (adding ${}) the quotes will be changed to backticks
 
@@ -45,8 +45,8 @@ Example with the default config. If you prefer, you could call the setup functio
 ```lua
 require('template-string').setup({
   filetypes = { 'html', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' }, -- filetypes where the plugin is active
-  jsx_brackets = true, -- must add brackets to jsx attributes
-  remove_template_string = false, -- remove backticks when there are no template string
+  jsx_brackets = true, -- must add brackets to JSX attributes
+  remove_template_string = false, -- remove backticks when there are no template strings
   restore_quotes = {
     -- quotes used when "remove_template_string" option is enabled
     normal = [[']],
