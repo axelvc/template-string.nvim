@@ -10,6 +10,8 @@ function M.handle_text_changed()
 
 	if filetype == "python" then
 		handler.python.on_type()
+  elseif filetype == 'cs' then
+    handler.csharp.on_type()
 	else
 		handler.js.on_type()
 	end
