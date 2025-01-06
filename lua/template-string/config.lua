@@ -11,4 +11,8 @@ M.options = {
 	},
 }
 
+M.state = {
+	enabled = true,
+}
+
 return M
