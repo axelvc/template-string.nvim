@@ -6,7 +6,8 @@ local M = {}
 ---@param text string
 ---@return boolean
 function M.is_quote_string(text)
-  return text:match("^f") == nil
+  local prefix = text:match("^([rf]+)[\"']")
+  return not prefix or prefix:find("f") == nil
 end
 
 ---@param text string
@@ -102,7 +103,8 @@ function M.handle_f_string(node, buf, text)
   end
 
   -- convert to quote string
-  local new_text = text:sub(2)
+  local prefix = text:match("^([rf]+)[\"']")
+  local new_text = prefix:gsub("f", "") .. text:sub(#prefix + 1)
   local lines = U.is_multiline(text) and M.get_text_lines(new_text) or { new_text }
 
   if not U.is_multiline(text) or M.is_cursor_in_first_row(node) then
