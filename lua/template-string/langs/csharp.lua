@@ -77,7 +77,13 @@ end
 function M.before_quotes(node, text)
 	local node_row, node_col = node:range()
 	local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
-	local first_quote_col = text:find('"') + node_col
+	local quote_idx = text:find('"')
+
+	if not quote_idx then
+	  return false
+	end
+
+	local first_quote_col = quote_idx + node_col
 
 	cursor_row = cursor_row - 1
 
